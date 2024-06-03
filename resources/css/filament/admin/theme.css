@@ -1,0 +1,15 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+.fi-sidebar {
+    @apply bg-gray-200 dark:bg-transparent !important;
+}
+
+/* .fi-sidebar-item a {
+    @apply  text-primary-100;
+}
+
+.fi-sidebar-item a:hover {
+    @apply  text-primary-50 bg-primary-700;
+} */

@@ -1,0 +1,33 @@
+services:
+    mysql:
+      container_name: fifi_db
+      image: mysql:latest
+      ports:
+        - 3306:3306
+      volumes:
+        - './mysql:/var/lib/mysql'
+      networks:
+        - fifi
+      environment:
+        ALLOW_EMPTY_PASSWORD: "no"
+        MYSQL_ROOT_PASSWORD: admin
+        MYSQL_DATABASE: admin
+        MYSQL_USER: admin
+        MYSQL_PASSWORD: admin
+
+    phpmyadmin:
+      container_name: fifi_phpmyadmin
+      image: phpmyadmin:latest
+      environment:
+        - MYSQL_ROOT_PASSWORD=admin
+        - PMA_HOST=mysql
+        - TZ=America/Maceio
+      ports:
+        - '9090:80'
+      depends_on:
+        - mysql
+      networks:
+        - fifi
+
+networks:
+  fifi:
