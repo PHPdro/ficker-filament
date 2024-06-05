@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Transaction;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,9 +16,31 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        Transaction::factory(3)->create([
+            'date' => '2024-01-15',
+        ]);
+        Transaction::factory(5)->create([
+            'date' => '2024-02-15',
+        ]);
+        Transaction::factory(10)->create([
+            'date' => '2024-03-15',
+        ]);
+        Transaction::factory(7)->create([
+            'date' => '2024-04-15',
+            'type' => 'expense',
+        ]);
+        Transaction::factory(4)->create([
+            'date' => '2024-05-15',
+            'type' => 'expense',
+        ]);
+        Transaction::factory(1)->create([
+            'date' => '2024-06-15',
+            'type' => 'expense',
         ]);
     }
 }
