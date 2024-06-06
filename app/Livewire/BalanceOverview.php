@@ -10,7 +10,7 @@ class BalanceOverview extends BaseWidget
 {
     protected function getStats(): array
     {
-        $balance = Transaction::query()->where('type', 'income')->sum('value') + Transaction::query()->where('type', 'expense')->sum('value');
+        $balance = Transaction::query()->where('type', 'income')->sum('value') - Transaction::query()->where('type', 'expense')->sum('value');
         $transactions_chart = [];
         $transactions = Transaction::query()->get('value');
         foreach($transactions as $transaction) {
