@@ -24,7 +24,6 @@ class TransactionResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->columns(3)
             ->schema([
                 Forms\Components\ToggleButtons::make('type')
                     ->options([
@@ -58,7 +57,8 @@ class TransactionResource extends Resource
                     ->relationship('card', 'description')
                     ->options(Card::all()->pluck('description', 'id'))
                     ->searchable()
-                    ->native(false),
+                    ->native(false)
+                    ->prefixIcon('heroicon-o-credit-card'),
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->maxLength(255),
@@ -107,8 +107,6 @@ class TransactionResource extends Resource
                 ])
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->iconButton(),
                 Tables\Actions\EditAction::make()
                     ->iconButton(),
             ])
@@ -118,20 +116,17 @@ class TransactionResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTransactions::route('/'),
-            'create' => Pages\CreateTransaction::route('/create'),
-            'view' => Pages\ViewTransaction::route('/{record}'),
-            'edit' => Pages\EditTransaction::route('/{record}/edit'),
+            'index' => Pages\ManageTransactions::route('/'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            TransactionResource\Widgets\TransactionOverview::class,
         ];
     }
 }
