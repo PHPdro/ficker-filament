@@ -16,4 +16,11 @@ class ManageCategories extends ManageRecords
             Actions\CreateAction::make()
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            CategoryResource\Widgets\CategoryExpensesChart::class,
+        ];
+    }
 }
