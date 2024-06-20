@@ -11,7 +11,11 @@ class BalanceHistoryChart extends ChartWidget
 {
     protected static ?string $heading = 'Balance History';
 
-    public ?string $filter = '2023';
+    public ?string $filter = '2024';
+
+    protected int | string | array $columnSpan = '2';
+    protected static ?string $maxHeight = '300px';
+
 
     public function getDescription(): ?string
     {
@@ -32,10 +36,15 @@ class BalanceHistoryChart extends ChartWidget
                                         ->where(['user_id' => auth()->id(), 'type' => 'expense'])
                                         ->groupBy('month')->get();
         $months = [];
+        $incomes_list = [];
+        $expenses_list = [];
         $balances = [];
         
         for ($i = 0; $i < count($incomes); $i++) {
-            $balance = $incomes[$i]['value'] - $expenses[$i]['value'];
+            array_push($incomes_list, $incomes[$i]->value);
+            array_push($expenses_list, $expenses[$i]->value);
+
+            $balance = $incomes[$i]->value - $expenses[$i]->value;
             array_push($balances, $balance);
 
             //Convertendo o inteiro para o nome do mês correspondente e adicionando ao array months
@@ -47,8 +56,25 @@ class BalanceHistoryChart extends ChartWidget
         return [
             'datasets' => [
                 [
+                    'label' => 'Incomes',
+                    'data' => $incomes_list,
+                    'backgroundColor' => 'rgba(0, 255, 0, 0.1)',
+                    'borderColor' => '#22c55e',
+                    'hoverBackgroundColor' => 'rgba(0, 255, 0, 0.2)',
+                ],
+                [
+                    'label' => 'Expenses',  
+                    'data' => $expenses_list,
+                    'backgroundColor' => 'rgba(255, 0, 0, 0.1)',
+                    'borderColor' => '#f43f5e',
+                    'hoverBackgroundColor' => 'rgba(255, 0, 0, 0.2)',
+                ],
+                [
                     'label' => 'Balance',
                     'data' => $balances,
+                    'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
+                    'hoverBackgroundColor' => 'rgba(139, 92, 246, 0.3)',
+
                 ],
             ],
             'labels' => $months,
@@ -73,7 +99,6 @@ class BalanceHistoryChart extends ChartWidget
             $years_list[$years[$i]->year] = $years[$i]->year;
         }
 
-        // dd($years_list);
         return $years_list;
     }
 }
