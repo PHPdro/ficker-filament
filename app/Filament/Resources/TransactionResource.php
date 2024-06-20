@@ -21,6 +21,11 @@ class TransactionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -73,6 +78,10 @@ class TransactionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordClasses(fn(Transaction $record) => match ($record->type) {
+                'income' => null,
+                'expense' => 'border-l-4 bg-danger-50 !border-l-danger-500 dark:bg-gray-800',
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),
@@ -83,7 +92,6 @@ class TransactionResource extends Resource
                     ->money('BRL')
                     ->sortable(),
                 Tables\Columns\IconColumn::make('type')
-                    // ->label('')
                     ->icon(fn (string $state): string => match ($state) {
                         'income' => 'heroicon-o-arrow-up-circle',
                         'expense' => 'heroicon-o-arrow-down-circle',

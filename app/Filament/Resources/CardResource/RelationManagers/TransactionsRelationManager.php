@@ -27,7 +27,7 @@ class TransactionsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('description')
+            // ->recordTitleAttribute('description')
             ->columns([
                 Tables\Columns\TextColumn::make('description'),
                 Tables\Columns\TextColumn::make('date')
