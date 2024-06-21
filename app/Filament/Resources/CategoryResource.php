@@ -19,19 +19,19 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static bool $shouldRegisterNavigation = false;
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
-            ]);
-    }
+    // public static function form(Form $form): Form
+    // {
+    //     return $form
+    //         ->schema([
+    //             Forms\Components\TextInput::make('name')
+    //                 ->required()
+    //                 ->maxLength(255),
+    //             Forms\Components\Textarea::make('description')
+    //                 ->columnSpanFull(),
+    //         ]);
+    // }
 
     // public static function table(Table $table): Table
     // {
@@ -62,17 +62,17 @@ class CategoryResource extends Resource
     //         ]);
     // }
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ManageCategories::route('/'),
-        ];
-    }
+    // public static function getPages(): array
+    // {
+    //     return [
+    //         'index' => Pages\ManageCategories::route('/'),
+    //     ];
+    // }
 
-    public static function getWidgets(): array
-    {
-        return [
-            CategoryResource\Widgets\CategoryExpensesChart::class,
-        ];
-    }
+    // public static function getWidgets(): array
+    // {
+    //     return [
+    //         CategoryResource\Widgets\CategoryExpensesChart::class,
+    //     ];
+    // }
 }

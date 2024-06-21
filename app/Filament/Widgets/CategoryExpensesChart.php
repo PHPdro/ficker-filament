@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\CategoryResource\Widgets;
+namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
 
@@ -16,6 +16,7 @@ class CategoryExpensesChart extends ChartWidget
                 [
                     'data' => [1, 10, 5],
                     'backgroundColor' => ['#FF6633', '#FFB399', '#FF33FF'],
+                    'borderColor' => ['#FF6633', '#FFB399', '#FF33FF'],
                 ],
             ],
             'labels' => ['Jan', 'Feb', 'Mar'],

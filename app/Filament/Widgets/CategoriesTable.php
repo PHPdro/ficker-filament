@@ -6,31 +6,48 @@ use App\Filament\Resources\CategoryResource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-
+use Filament\Forms;
 
 class CategoriesTable extends BaseWidget
 {
     protected static ?string $heading = 'Categories';
     
     protected int | string | array $columnSpan = '1';
-
+    
     public function table(Table $table): Table
     {
         return $table
             ->query(CategoryResource::getEloquentQuery())
-            ->defaultPaginationPageOption(5)
+            ->striped()
+            ->paginated([4, 8, 12, 'all'])
+            ->queryStringIdentifier('categories')
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->form([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\Textarea::make('description')
+                            ->columnSpanFull(),
+                    ])
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make()
+                    ->link(),
+            ])
+            ->headerActions([
+                    Tables\Actions\CreateAction::make()
+                        ->form([
+                            Forms\Components\TextInput::make('name')
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\Textarea::make('description')
+                                ->columnSpanFull(),
+                        ])
             ]);
     }
 }

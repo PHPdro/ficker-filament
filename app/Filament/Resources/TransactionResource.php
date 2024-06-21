@@ -82,6 +82,7 @@ class TransactionResource extends Resource
                 'income' => null,
                 'expense' => 'border-l-4 bg-danger-50 !border-l-danger-500 dark:bg-gray-800',
             })
+            ->defaultSort('date', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),
