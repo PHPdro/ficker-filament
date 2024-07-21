@@ -20,9 +20,9 @@ class TransactionFactory extends Factory
             'user_id' => 1,
             'description' => fake()->name(),
             'type' => 'income',
-            'category_id' => 1,
+            'category_id' => random_int(1, 5),
             'value' => random_int(1, 1000), 
-            'date' => today(),
+            'date' => random_int(2023, 2024) . '-' . random_int(01, 12) . '-' . random_int(1, 30),
         ];
     }
 }
