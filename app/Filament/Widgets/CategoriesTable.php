@@ -30,9 +30,12 @@ class CategoriesTable extends BaseWidget
                     ->form([
                         Forms\Components\TextInput::make('name')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->columnSpan(1),
+                        Forms\Components\ColorPicker::make('color')
+                            ->columnSpan(1),
                         Forms\Components\Textarea::make('description')
-                            ->columnSpanFull(),
+                            ->columnSpan(1)
                     ])
             ])
             ->bulkActions([
@@ -45,8 +48,8 @@ class CategoriesTable extends BaseWidget
                             Forms\Components\TextInput::make('name')
                                 ->required()
                                 ->maxLength(255),
+                            Forms\Components\ColorPicker::make('color'),
                             Forms\Components\Textarea::make('description')
-                                ->columnSpanFull(),
                         ])
             ]);
     }
