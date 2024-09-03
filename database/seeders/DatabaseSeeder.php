@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Pedro',
             'email' => 'pedro110302@gmail.com',
             'password' => Hash::make('pedro123'),
-            // 'password_confirmation' => Hash::make('pedro123'),
         ]);
 
         Category::factory(5)->create();

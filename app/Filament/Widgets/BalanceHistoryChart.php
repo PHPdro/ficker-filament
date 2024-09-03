@@ -6,6 +6,7 @@ use Filament\Widgets\ChartWidget;
 use App\Models\Transaction;
 use DateTime;
 use IntlDateFormatter;
+use App\Models\Balance;
 
 class BalanceHistoryChart extends ChartWidget
 {
@@ -26,55 +27,67 @@ class BalanceHistoryChart extends ChartWidget
     {   
         $activeFilter = $this->filter;
 
+        $balances = Balance::selectRaw('MONTH(date) as month, SUM(amount) as amount')
+                            ->whereYear('date', $activeFilter)
+                            ->where('user_id', auth()->id())
+                            ->groupBy('month')
+                            ->orderBy('month')->get();
+
         $incomes = Transaction::query()->selectRaw('MONTH(date) as month, SUM(value) as value')
-                                        ->whereYear('date', $this->filter)
+                                        ->whereYear('date', $activeFilter)
                                         ->where(['user_id' => auth()->id(), 'type' => 'income'])
                                         ->groupBy('month')->get();
 
         $expenses = Transaction::query()->selectRaw('MONTH(date) as month, SUM(value) as value')
-                                        ->whereYear('date', $this->filter)
+                                        ->whereYear('date', $activeFilter)
                                         ->where(['user_id' => auth()->id(), 'type' => 'expense'])
                                         ->groupBy('month')->get();
+
         $months = [];
-        $incomes_list = [];
-        $expenses_list = [];
-        $balances = [];
-        
+        $months_balance = [0,0,0,0,0,0,0,0,0,0,0,0];
+        $months_incomes = [0,0,0,0,0,0,0,0,0,0,0,0];
+        $months_expenses = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+        for ($i = 0; $i < count($balances); $i++) {
+            $months_balance[$balances[$i]->month - 1] = $balances[$i]->amount;
+        }
+
         for ($i = 0; $i < count($incomes); $i++) {
-            array_push($incomes_list, $incomes[$i]->value);
-            array_push($expenses_list, $expenses[$i]->value);
+            $months_incomes[$incomes[$i]->month - 1] = $incomes[$i]->value;
+        }
 
-            $balance = $incomes[$i]->value - $expenses[$i]->value;
-            array_push($balances, $balance);
+        for ($i = 0; $i < count($expenses); $i++) {
+            $months_expenses[$expenses[$i]->month - 1] = $expenses[$i]->value;
+        }
 
+        for ($i = 0; $i < count($months_balance); $i++) {
             //Convertendo o inteiro para o nome do mês correspondente e adicionando ao array months
-            $month = DateTime::createFromFormat('!m', $incomes[$i]->month);
+            $month = DateTime::createFromFormat('!m', array_keys($months_balance)[$i]+1);
             $formatter = new IntlDateFormatter('en-US', IntlDateFormatter::NONE, IntlDateFormatter::NONE, null, null, 'MMM');
             array_push($months, $formatter->format($month));
         }
-
+        
         return [
             'datasets' => [
                 [
                     'label' => 'Incomes',
-                    'data' => $incomes_list,
-                    'backgroundColor' => 'rgba(0, 255, 0, 0.1)',
-                    'borderColor' => '#22c55e',
-                    'hoverBackgroundColor' => 'rgba(0, 255, 0, 0.2)',
+                    'data' => $months_incomes,
+                    'backgroundColor' => 'rgba(234, 179, 8, 0.1)',
+                    'borderColor' => '#eab308',
+                    'hoverBackgroundColor' => 'rgba(234, 179, 8, 0.2)',
                 ],
                 [
                     'label' => 'Expenses',  
-                    'data' => $expenses_list,
+                    'data' => $months_expenses,
                     'backgroundColor' => 'rgba(255, 0, 0, 0.1)',
                     'borderColor' => '#f43f5e',
                     'hoverBackgroundColor' => 'rgba(255, 0, 0, 0.2)',
                 ],
                 [
                     'label' => 'Balance',
-                    'data' => $balances,
+                    'data' => $months_balance,
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
                     'hoverBackgroundColor' => 'rgba(139, 92, 246, 0.3)',
-
                 ],
             ],
             'labels' => $months,
