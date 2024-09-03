@@ -53,6 +53,7 @@ class TransactionResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\ColorPicker::make('color'),
                         Forms\Components\Textarea::make('description')
                     ])
                     ->required()
@@ -92,15 +93,15 @@ class TransactionResource extends Resource
                 Tables\Columns\TextColumn::make('value')
                     ->money('BRL')
                     ->sortable(),
-                Tables\Columns\IconColumn::make('type')
-                    ->icon(fn (string $state): string => match ($state) {
-                        'income' => 'heroicon-o-arrow-up-circle',
-                        'expense' => 'heroicon-o-arrow-down-circle',
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'income' => 'success',
-                        'expense' => 'danger',
-                    }),
+                // Tables\Columns\IconColumn::make('type')
+                //     ->icon(fn (string $state): string => match ($state) {
+                //         'income' => 'heroicon-o-arrow-up-circle',
+                //         'expense' => 'heroicon-o-arrow-down-circle',
+                //     })
+                //     ->color(fn (string $state): string => match ($state) {
+                //         'income' => 'success',
+                //         'expense' => 'danger',
+                //     }),
                 Tables\Columns\TextColumn::make('category.name')
                     ->searchable()
                     ->badge(),
